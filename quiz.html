@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C# Advance Quiz</title>
+<style>
+:root{--bg:#f7f8fa;--fg:#1c2330;--card:#fff;--muted:#5b6575;--accent:#5b3fd6;--line:#e3e6ec;--ok:#1a8a4a;--okbg:#e4f6ec;--bad:#c62f3b;--badbg:#fdebed}
+@media (prefers-color-scheme:dark){:root{--bg:#12151c;--fg:#e8ebf2;--card:#1a1f2a;--muted:#9aa4b5;--accent:#9d86ff;--line:#2a3140;--ok:#4fd18a;--okbg:#14301f;--bad:#ff7b86;--badbg:#3a1a1e}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Noto Sans Khmer",sans-serif;line-height:1.55}
+main{max-width:760px;margin:0 auto;padding:32px 16px}
+h1{margin:0 0 4px;font-size:1.6rem}
+a.back{color:var(--accent);text-decoration:none;font-size:.9rem}
+.sub{color:var(--muted);margin:0 0 20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px}
+button{font:inherit;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.chip{padding:8px 14px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:999px}
+.chip.on,.chip:hover{background:var(--accent);color:#fff}
+.q{font-weight:600;margin:0 0 12px}
+.opt{display:block;width:100%;text-align:left;padding:10px 14px;margin-bottom:8px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg)}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}
+.opt.bad{border-color:var(--bad);background:var(--badbg)}
+.exp{margin-top:10px;color:var(--muted);font-size:.95rem}
+.bar{height:6px;background:var(--line);border-radius:3px;margin-bottom:16px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);transition:width .2s}
+.next{margin-top:12px;padding:9px 20px;border:0;border-radius:8px;background:var(--accent);color:#fff}
+.score{font-size:2rem;font-weight:700;margin:6px 0}
+code{background:var(--line);padding:1px 5px;border-radius:4px;font-size:.92em}
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="./">← ត្រឡប់ក្រោយ</a>
+<h1>Quiz ជំពូកទី ៧</h1>
+<p class="sub">ជ្រើសមេរៀន ឬធ្វើគ្រប់មេរៀន</p>
+<div class="chips" id="chips"></div>
+<div id="app"></div>
+</main>
+<script src="quiz-data.js"></script>
+<script>
+const NAMES={"7.1":"Inheritance","7.2":"Overriding","7.3":"Polymorphism","7.4":"Abstraction","7.5":"Encapsulation","7.6":"Interface"};
+const app=document.getElementById("app"),chips=document.getElementById("chips");
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/`([^`]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+let qs=[],i=0,score=0,cur="";
+function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.random()*(k+1)|0;[a[k],a[j]]=[a[j],a[k]]}return a}
+function start(key){
+  cur=key;
+  qs=key==="all"?Object.entries(QUIZ).flatMap(([c,l])=>l.map(q=>({...q,c}))):QUIZ[key].map(q=>({...q,c:key}));
+  qs=shuffle(qs);i=0;score=0;
+  [...chips.children].forEach(b=>b.classList.toggle("on",b.dataset.k===key));
+  show();
+}
+function show(){
+  if(i>=qs.length){
+    app.innerHTML=`<div class="card"><div>លទ្ធផល</div><div class="score">${score} / ${qs.length}</div><button class="next" id="r">ធ្វើម្ដងទៀត</button></div>`;
+    document.getElementById("r").onclick=()=>start(cur);return;
+  }
+  const q=qs[i];
+  app.innerHTML=`<div class="bar"><i style="width:${i/qs.length*100}%"></i></div>
+  <div class="card"><div class="sub">សំណួរ ${i+1}/${qs.length} · មេរៀន ${q.c} ${NAMES[q.c]}</div>
+  <p class="q">${esc(q.q)}</p><div id="opts"></div><div id="fb"></div></div>`;
+  const box=document.getElementById("opts");
+  q.o.forEach((t,k)=>{
+    const b=document.createElement("button");b.className="opt";b.innerHTML="<b>"+"ABCD"[k]+".</b> "+esc(t);
+    b.onclick=()=>{
+      [...box.children].forEach((x,n)=>{x.disabled=true;if(n===q.a)x.classList.add("ok")});
+      if(k===q.a)score++;else b.classList.add("bad");
+      document.getElementById("fb").innerHTML=`<div class="exp">${esc(q.e)}</div><button class="next" id="n">${i+1<qs.length?"បន្ទាប់":"មើលលទ្ធផល"}</button>`;
+      document.getElementById("n").onclick=()=>{i++;show()};
+    };
+    box.appendChild(b);
+  });
+}
+chips.innerHTML=Object.keys(NAMES).map(k=>`<button class="chip" data-k="${k}">${k} ${NAMES[k]}</button>`).join("")+`<button class="chip" data-k="all">ទាំងអស់</button>`;
+chips.onclick=e=>{if(e.target.dataset.k)start(e.target.dataset.k)};
+const h=location.hash.slice(1);start(QUIZ[h]?h:"all");
+</script>
+</body>
+</html>
