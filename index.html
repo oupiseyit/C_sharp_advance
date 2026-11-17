@@ -25,7 +25,7 @@ p.sub{margin:0 0 28px;color:var(--muted)}
 <h1>ជំពូកទី ៧ Common Class</h1>
 <p class="sub">បញ្ជីមេរៀនទាំងអស់ — Slides និង សំណួរ/ចម្លើយ (Q&amp;A)</p>
 <div id="list"></div>
-<div class="links all"><a href="https://github.com/oupiseyit/C_sharp_advance/blob/main/QA/All_QA.md">Q&amp;A ទាំងអស់</a>
+<div class="links all"><a href="qa.html">Q&amp;A ទាំងអស់</a>
 <a href="QA/All_QA.docx">All_QA.docx</a>
 <a href="quiz.html">Quiz ទាំងអស់</a></div>
 </main>
@@ -40,7 +40,7 @@ const chapters=[
 ["7.6","Interface","7.6_Interface_c#.pptx","7.6_Interface_QA.md"]];
 document.getElementById("list").innerHTML=chapters.map(([n,t,s,q])=>
 `<div class="card"><div class="num">${n}</div><div class="title">${t}</div>
-<div class="links"><a href="${encodeURIComponent(s)}">Slides</a><a href="${repo}${q}">Q&amp;A</a><a href="quiz.html#${n}">Quiz</a></div></div>`).join("");
+<div class="links"><a href="${encodeURIComponent(s)}">Slides</a><a href="qa.html#${n}">Q&amp;A</a><a href="quiz.html#${n}">Quiz</a></div></div>`).join("");
 </script>
 </body>
 </html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C# Advance Q&amp;A</title>
+<style>
+:root{--bg:#ffffff;--fg:#1c2330;--card:#fff;--muted:#5b6575;--accent:#5b3fd6;--line:#e3e6ec;--code:#f3f4f8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Noto Sans Khmer",sans-serif;line-height:1.65}
+main{max-width:800px;margin:0 auto;padding:32px 16px}
+a.back{color:var(--accent);text-decoration:none;font-size:.9rem}
+h1{margin:4px 0 16px;font-size:1.6rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.chip{font:inherit;cursor:pointer;padding:8px 14px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:999px}
+.chip.on,.chip:hover{background:var(--accent);color:#fff}
+#content{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 22px 22px}
+#content h1{font-size:1.3rem;margin:16px 0}
+#content p{margin:10px 0}
+#content strong{color:var(--fg)}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;font-size:.88rem;line-height:1.5}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.92em}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.95rem}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+th{background:var(--code)}
+ul{padding-left:22px}
+.pn{display:flex;justify-content:space-between;margin-top:18px}
+.pn button{font:inherit;cursor:pointer;padding:8px 16px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:8px}
+.pn button:hover{background:var(--accent);color:#fff}
+.pn button:disabled{opacity:.3;pointer-events:none}
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="./">← ត្រឡប់ក្រោយ</a>
+<h1>សំណួរ និង ចម្លើយ (Q&amp;A) ជំពូកទី ៧</h1>
+<div class="chips" id="chips"></div>
+<div id="content">កំពុងផ្ទុក…</div>
+<div class="pn"><button id="prev">← មុន</button><button id="next">បន្ទាប់ →</button></div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+<script>
+const CH=[["7.1","Inheritance"],["7.2","Overriding"],["7.3","Polymorphism"],["7.4","Abstraction"],["7.5","Encapsulation"],["7.6","Interface"]];
+const chips=document.getElementById("chips"),box=document.getElementById("content");
+let idx=0;
+chips.innerHTML=CH.map(([n,t],k)=>`<button class="chip" data-k="${k}">${n} ${t}</button>`).join("");
+async function load(k){
+  idx=k;
+  [...chips.children].forEach((b,n)=>b.classList.toggle("on",n===k));
+  document.getElementById("prev").disabled=k===0;
+  document.getElementById("next").disabled=k===CH.length-1;
+  history.replaceState(null,"","#"+CH[k][0]);
+  box.textContent="កំពុងផ្ទុក…";
+  try{
+    const r=await fetch(`QA/${CH[k][0]}_${CH[k][1]}_QA.md`);
+    if(!r.ok)throw 0;
+    box.innerHTML=marked.parse(await r.text());
+  }catch(e){box.textContent="មិនអាចផ្ទុកបាន។"}
+  window.scrollTo(0,0);
+}
+chips.onclick=e=>{if(e.target.dataset.k)load(+e.target.dataset.k)};
+document.getElementById("prev").onclick=()=>load(idx-1);
+document.getElementById("next").onclick=()=>load(idx+1);
+const h=CH.findIndex(c=>c[0]===location.hash.slice(1));
+load(h<0?0:h);
+</script>
+</body>
+</html>
