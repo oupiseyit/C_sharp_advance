@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C# Advance – Chapter 7</title>
+<style>
+:root{--bg:#f7f8fa;--fg:#1c2330;--card:#fff;--muted:#5b6575;--accent:#5b3fd6;--line:#e3e6ec}
+@media (prefers-color-scheme:dark){:root{--bg:#12151c;--fg:#e8ebf2;--card:#1a1f2a;--muted:#9aa4b5;--accent:#9d86ff;--line:#2a3140}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Noto Sans Khmer",sans-serif;line-height:1.5}
+main{max-width:760px;margin:0 auto;padding:40px 16px}
+h1{margin:0 0 4px;font-size:1.7rem}
+p.sub{margin:0 0 28px;color:var(--muted)}
+.card{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.num{flex:none;width:44px;height:44px;border-radius:10px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700}
+.title{flex:1;font-weight:600}
+.links a{display:inline-block;margin-left:8px;padding:6px 12px;border:1px solid var(--accent);border-radius:8px;color:var(--accent);text-decoration:none;font-size:.9rem}
+.links a:hover{background:var(--accent);color:#fff}
+.all{margin-top:24px}
+@media(max-width:520px){.card{flex-wrap:wrap}.links{width:100%}.links a:first-child{margin-left:0}}
+</style>
+</head>
+<body>
+<main>
+<h1>ជំពូកទី ៧ Common Class</h1>
+<p class="sub">បញ្ជីមេរៀនទាំងអស់ — Slides និង សំណួរ/ចម្លើយ (Q&amp;A)</p>
+<div id="list"></div>
+<div class="links all"><a href="https://github.com/oupiseyit/C_sharp_advance/blob/main/QA/All_QA.md">Q&amp;A ទាំងអស់</a>
+<a href="QA/All_QA.docx">All_QA.docx</a></div>
+</main>
+<script>
+const repo="https://github.com/oupiseyit/C_sharp_advance/blob/main/QA/";
+const chapters=[
+["7.1","Inheritance","7.1 Inheritance (C#).pptx","7.1_Inheritance_QA.md"],
+["7.2","Overriding","7.2 Overriding.pptx","7.2_Overriding_QA.md"],
+["7.3","Polymorphism","7.3 Polymorphism.pptx","7.3_Polymorphism_QA.md"],
+["7.4","Abstraction","7.4 Abstraction.pptx","7.4_Abstraction_QA.md"],
+["7.5","Encapsulation","7.5 Encapsulation.pptx","7.5_Encapsulation_QA.md"],
+["7.6","Interface","7.6_Interface_c#.pptx","7.6_Interface_QA.md"]];
+document.getElementById("list").innerHTML=chapters.map(([n,t,s,q])=>
+`<div class="card"><div class="num">${n}</div><div class="title">${t}</div>
+<div class="links"><a href="${encodeURIComponent(s)}">Slides</a><a href="${repo}${q}">Q&amp;A</a></div></div>`).join("");
+</script>
+</body>
+</html>
